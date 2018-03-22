@@ -1,7 +1,8 @@
-# OLS
+############ OLS
 # dependent variable - hours studied in a week
 # independent variable - credits, work(hours per week), score(SAT), upper(binary var)=1 if more than 2 yr of uni, =0 otherwise
-# simulating data
+
+####### simulating data
 ## 1. credits - discrete random variable -> find distribution: pmf for credits
 ### if 9 credits: 0.2
 ###   10 credits: 0.03
@@ -13,9 +14,9 @@
 
 # assume we have 5000 students
 
-#Sample size 
+# Sample size 
 n<-5000
-#Probability
+# Probability
 prob <- c(0.2, 0.03, 0.05, 0.23, 0.05, 0.07, 0.17)
 # sample of credits
 credits <- sample(9:15, n, replace=TRUE, prob=prob)
@@ -35,22 +36,22 @@ barplot(table(work))
 # score(SAT score) -> continuous: normal random variable, N(1600,200)
 ## normal N(1600,200)
 score <- rnorm(n, mean = 1600, sd = 200)
-## normality check
+####### normality check
 ### plot
 hist(score, prob=TRUE)
 lines(density(score),col="blue")
 
 # upper: create binomial
 upper <- rbinom(n,1,0.45)
-# plot
 barplot(table(upper))
 
 # Disturbance term
-epsilon <- rnorm(n,mean = 1, sd = 1.7)
+epsilon <- rnorm(n,mean = 0, sd = 1.7)
 # plot
 plot(density(epsilon))
 
-# simulating the dependent variable
+# simulating the dependent variable: y=Xβ+ε
+# 1. define the coefficients
 ## intercept
 beta_0 <- 1.2
 
@@ -66,17 +67,18 @@ beta_3 <- 0.015
 # upper
 beta_4 <- 0.5
 
-# Beta
+# Beta Vector
 beta <- c(beta_0, beta_1, beta_2, beta_3, beta_4)
 
-## create matrix X
+## create matrix X and a colume of ones
 X <- cbind(rep(1,n), credits, work, score, upper)
 View(X)
 
-## generate dependent
+## generate dependent : y=Xβ+ε
 y <- X%*%beta+epsilon
 
-# performing OLS, to get beta hat
+# performing OLS, to get beta hat  β̂ OLS
+### β̂ OLS=(X′X)−1X′y
 betahat <- solve(t(X)%*%X)%*%t(X)%*%y
 betahat
 beta
@@ -86,5 +88,3 @@ regression <- lm(y~credits+work+score+upper)
 coefficients(regression)
 summary(regression)
 regression$coefficients
-
-
