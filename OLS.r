@@ -1,4 +1,4 @@
-############ OLS
+############ OLS ##########################################
 # dependent variable - hours studied in a week
 # independent variable - credits, work(hours per week), score(SAT), upper(binary var)=1 if more than 2 yr of uni, =0 otherwise
 
